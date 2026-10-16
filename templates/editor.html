@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Create Your Own Design — Yashnu Creative</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body class="editor-body">
+<header class="editor-topbar">
+  <a class="brand yashnu-editor-brand" href="/" aria-label="Yashnu Creative home"><img src="{{ url_for('static', filename='images/yashnu-creative-logo.jpg') }}" alt="Yashnu Creative logo"><span>Yashnu Creative <small>DESIGN STUDIO</small></span></a>
+  <div class="project-name"><input id="projectName" value="{{ project.name if project else 'Untitled design' }}" aria-label="Project name"><span class="save-status" id="saveStatus">Not saved</span></div>
+  <div class="editor-actions"><button class="btn btn-outline" id="saveBtn">Save project</button><button class="btn btn-dark" id="exportBtn">Export PNG ↓</button></div>
+</header>
+<div class="editor-layout">
+  <aside class="tool-sidebar">
+    <div class="side-label">BUILD YOUR DESIGN</div>
+    <button class="tool-button active" data-tool="select"><span>↖</span>Select</button>
+    <button class="tool-button" id="addText"><span>T</span>Add text</button>
+    <button class="tool-button" id="addRect"><span>▰</span>Rectangle</button>
+    <button class="tool-button" id="addCircle"><span>◯</span>Circle</button>
+    <label class="tool-button upload-button"><span>↑</span>Upload image<input id="imageUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></label>
+    <div class="side-divider"></div>
+    <div class="side-label">CANVAS</div>
+    <label class="field-label">Design type</label>
+    <select id="designType"><option value="logo">Logo</option><option value="web">Web page</option><option value="poster" selected>Marketing poster</option><option value="ad">Branding ad</option></select>
+    <label class="field-label">Canvas size</label>
+    <select id="canvasPreset"><option value="poster">Poster · 600 × 750</option><option value="square">Square · 600 × 600</option><option value="landscape">Landscape · 800 × 450</option><option value="web">Web · 900 × 600</option></select>
+    <label class="field-label">Background</label><div class="color-row"><input id="bgColor" type="color" value="#f8f1e8"><span id="bgHex">#F8F1E8</span></div>
+    <button class="btn btn-outline full-btn" id="clearBtn">Clear canvas</button>
+    <div class="sidebar-bottom">TIP · Select an object to edit it. Drag it on the canvas to reposition.</div>
+  </aside>
+  <main class="workspace">
+    <div class="workspace-heading"><div><span class="eyebrow">YASHNU CREATIVE · DESIGN WORKSPACE</span><h1 id="canvasHeading">Create your own design.</h1></div><div class="zoom-label">100% <span>·</span> Canvas</div></div>
+    <div class="canvas-stage"><div class="canvas-wrap"><canvas id="designCanvas" width="600" height="750"></canvas></div></div>
+    <div class="workspace-footer"><span><i class="status-dot"></i> All changes stay in your workspace until saved</span><span id="canvasDimensions">600 × 750 px</span></div>
+  </main>
+  <aside class="properties-panel">
+    <div class="panel-heading"><h2>Properties</h2><span>✳</span></div>
+    <p class="panel-help" id="emptySelection">Select an object on the canvas to customize it.</p>
+    <div id="propertyFields" hidden>
+      <div class="selected-kind" id="selectedKind">TEXT OBJECT</div>
+      <label class="field-label" id="textLabel">Text</label><textarea id="objectText" rows="3"></textarea>
+      <label class="field-label">Color</label><div class="color-row"><input id="objectColor" type="color" value="#222222"><span id="objectHex">#222222</span></div>
+      <div id="fontFields"><label class="field-label">Font size <span id="fontSizeValue">48</span> px</label><input id="fontSize" type="range" min="10" max="150" value="48"><label class="field-label">Font family</label><select id="fontFamily"><option>Arial</option><option>Georgia</option><option>Verdana</option><option>Impact</option><option>Courier New</option></select><label class="field-label">Weight</label><select id="fontWeight"><option value="400">Regular</option><option value="700">Bold</option></select></div>
+      <div class="dimension-grid"><div><label class="field-label">X position</label><input id="objectX" type="number" min="0"></div><div><label class="field-label">Y position</label><input id="objectY" type="number" min="0"></div></div>
+      <div class="dimension-grid"><div><label class="field-label">Width</label><input id="objectW" type="number" min="1"></div><div><label class="field-label">Height</label><input id="objectH" type="number" min="1"></div></div>
+      <button class="btn btn-outline full-btn danger" id="deleteBtn">Delete selected object</button>
+    </div>
+    <div class="panel-divider"></div><div class="side-label">START WITH A TEMPLATE</div>
+    <button class="starter-template" data-template="minimal"><span class="template-thumb thumb-minimal">Aa</span><span><b>Minimal type</b><small>Clean, editorial look</small></span><span>↗</span></button>
+    <button class="starter-template" data-template="launch"><span class="template-thumb thumb-launch">GO!</span><span><b>Product launch</b><small>Bold campaign poster</small></span><span>↗</span></button>
+    <button class="starter-template" data-template="nature"><span class="template-thumb thumb-nature">✳</span><span><b>Natural brand</b><small>Organic and friendly</small></span><span>↗</span></button>
+    <div class="panel-note">Your design is saved locally in this app's project library when you click <b>Save project</b>.</div>
+  </aside>
+</div>
+<script>
+window.INITIAL_PROJECT = {{ project|tojson if project else 'null' }};
+const initialType = new URLSearchParams(location.search).get('type');
+if (initialType) window.INITIAL_TYPE = initialType;
+</script>
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+</body></html>
